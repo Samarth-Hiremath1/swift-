@@ -34,10 +34,16 @@ export default function LandingPage() {
     <div className="min-h-screen flex flex-col">
       <header className="border-b">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="text-2xl font-bold text-rose-500">RentSpot</div>
+          <Link href="/home" className="text-2xl font-bold text-rose-500">
+            RentSpot
+          </Link>
           <nav className="hidden md:flex space-x-4">
-            <a href="#" className="text-gray-600 hover:text-gray-900">Explore</a>
-            <a href="#" className="text-gray-600 hover:text-gray-900">Your Rentals</a>
+            <Link href="/explore" className="text-gray-600 hover:text-gray-900">
+              Explore
+            </Link>
+            <Link href="/rentals" className="text-gray-600 hover:text-gray-900">
+              Your Rentals
+            </Link>
           </nav>
           <div className="flex space-x-4">
             <Button variant="ghost">Sign up</Button>
@@ -45,6 +51,8 @@ export default function LandingPage() {
           </div>
         </div>
       </header>
+
+      
 
       <main className="flex-grow">
         {/* Hero Section */}

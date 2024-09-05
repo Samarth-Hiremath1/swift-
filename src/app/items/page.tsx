@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 // import { DatePickerWithRange } from "@/components/ui/date-picker-with-range"
 
+import Link from 'next/link' // Import Link for navigation
+
+
 export default function ItemViewPage() {
   const [dateRange, setDateRange] = useState({ from: new Date(), to: new Date() })
 
@@ -13,10 +16,16 @@ export default function ItemViewPage() {
     <div className="min-h-screen flex flex-col">
       <header className="border-b">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="text-2xl font-bold text-rose-500">RentSpot</div>
+          <Link href="/home" className="text-2xl font-bold text-rose-500">
+            RentSpot
+          </Link>
           <nav className="hidden md:flex space-x-4">
-            <a href="#" className="text-gray-600 hover:text-gray-900">Explore</a>
-            <a href="#" className="text-gray-600 hover:text-gray-900">Your Rentals</a>
+            <Link href="/explore" className="text-gray-600 hover:text-gray-900">
+              Explore
+            </Link>
+            <Link href="/rentals" className="text-gray-600 hover:text-gray-900">
+              Your Rentals
+            </Link>
           </nav>
           <div className="flex space-x-4">
             <Button variant="ghost">Sign up</Button>
