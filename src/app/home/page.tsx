@@ -52,7 +52,7 @@ export default function LandingPage() {
         </div>
       </header>
 
-      
+
 
       <main className="flex-grow">
         {/* Hero Section */}
@@ -60,9 +60,13 @@ export default function LandingPage() {
           <div className="container mx-auto px-4">
             <h1 className="text-4xl md:text-6xl font-bold text-center mb-6">Rent Anything, Anywhere</h1>
             <p className="text-xl text-center mb-8 text-gray-600">Discover unique items to rent for your next project, event, or adventure.</p>
-            <div className="max-w-3xl mx-auto bg-white rounded-full shadow-lg p-2 flex items-center">
-              <Input type="text" placeholder="What do you want to rent?" className="flex-grow border-none focus:ring-0" />
-              <Input type="text" placeholder="Where?" className="flex-grow border-none focus:ring-0" />
+            <div className="max-w-3xl mx-auto bg-white rounded-full shadow-lg p-2 flex items-center space-x-4">
+              <div className="flex-grow">
+                <Input type="text" placeholder="What do you want to rent?" className="w-full border-none focus:ring-0" />
+              </div>
+              <div className="flex-grow">
+                <Input type="text" placeholder="Where?" className="w-full border-none focus:ring-0" />
+              </div>
               <Button size="lg" className="rounded-full">
                 <Search className="mr-2" />
                 Search
@@ -92,33 +96,33 @@ export default function LandingPage() {
         </section>
 
         {/* Trending Items */}
-      <section className="bg-gray-50 py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-semibold mb-8 text-center">Trending Items</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { id: 1, name: 'High-End Camera', price: 50, rating: 4.9, icon: <Camera size={24} /> },
-              { id: 2, name: 'Mountain Bike', price: 35, rating: 4.7, icon: <Tent size={24} /> },
-              { id: 3, name: 'Drone', price: 75, rating: 4.8, icon: <Camera size={24} /> },
-              { id: 4, name: 'Camping Tent', price: 30, rating: 4.6, icon: <Tent size={24} /> }
-            ].map((item, index) => (
-              <Link href={`/items/${item.id}`} key={index}> {/* Use Link to create a clickable card */}
-                <div className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer">
-                  <div className="h-48 bg-gray-200 flex items-center justify-center text-rose-500">{item.icon}</div>
-                  <div className="p-4">
-                    <h3 className="font-semibold mb-2">{item.name}</h3>
-                    <p className="text-gray-600 mb-2">${item.price}/day</p>
-                    <div className="flex items-center">
-                      <Star className="text-yellow-400 fill-current" size={16} />
-                      <span className="ml-1 text-sm text-gray-600">{item.rating}</span>
+        <section className="bg-gray-50 py-20">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-semibold mb-8 text-center">Trending Items</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {[
+                { id: 1, name: 'High-End Camera', price: 50, rating: 4.9, icon: <Camera size={24} /> },
+                { id: 2, name: 'Mountain Bike', price: 35, rating: 4.7, icon: <Tent size={24} /> },
+                { id: 3, name: 'Drone', price: 75, rating: 4.8, icon: <Camera size={24} /> },
+                { id: 4, name: 'Camping Tent', price: 30, rating: 4.6, icon: <Tent size={24} /> }
+              ].map((item, index) => (
+                <Link href={`/items/${item.id}`} key={index}> {/* Use Link to create a clickable card */}
+                  <div className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer">
+                    <div className="h-48 bg-gray-200 flex items-center justify-center text-rose-500">{item.icon}</div>
+                    <div className="p-4">
+                      <h3 className="font-semibold mb-2">{item.name}</h3>
+                      <p className="text-gray-600 mb-2">${item.price}/day</p>
+                      <div className="flex items-center">
+                        <Star className="text-yellow-400 fill-current" size={16} />
+                        <span className="ml-1 text-sm text-gray-600">{item.rating}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
         {/* How it Works */}
         <section className="py-20">
@@ -203,7 +207,7 @@ export default function LandingPage() {
                   { name: 'David', text: "Renting out my tools has been a breeze. Great platform for owners!" },
                   { name: 'Lisa', text: "I've had nothing but positive experiences with RentSpot. Highly recommend!" }
                 ].map((testimonial, index) => (
-                  <div key={index} className="bg-white p-6 rounded-lg shadow-md flex-shrink-0" style={{width: '300px'}}>
+                  <div key={index} className="bg-white p-6 rounded-lg shadow-md flex-shrink-0" style={{ width: '300px' }}>
                     <p className="mb-4 text-gray-600">"{testimonial.text}"</p>
                     <div className="flex items-center">
                       <div className="w-10 h-10 bg-gray-200 rounded-full mr-4"></div>
