@@ -1,0 +1,52 @@
+<form className="space-y-6" onSubmit={handleSignIn}>
+                <div>
+                  <Label htmlFor="email">Email address</Label>
+                  <div className="mt-1 relative rounded-md shadow-sm">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Mail className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                    </div>
+                    <Input 
+                      id="email" 
+                      name="email" 
+                      type="email" 
+                      autoComplete="email" 
+                      required 
+                      className="pl-10" 
+                      placeholder="you@example.com" 
+                      value={email} 
+                      onChange={(e) => setEmail(e.target.value)} 
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="password">Password</Label>
+                  <div className="mt-1 relative rounded-md shadow-sm">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Lock className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                    </div>
+                    <Input 
+                      id="password" 
+                      name="password" 
+                      type="password" 
+                      autoComplete="current-password" 
+                      required 
+                      className="pl-10" 
+                      placeholder="••••••••" 
+                      value={password} 
+                      onChange={(e) => setPassword(e.target.value)} 
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Button type="submit" className="w-full flex justify-center py-2 px-4" disabled={isLoading}>
+                    {isLoading ? 'Signing in...' : (
+                      <>
+                        Sign in
+                        <ArrowRight className="ml-2 h-5 w-5" aria-hidden="true" />
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </form>

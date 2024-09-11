@@ -9,62 +9,154 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowRight, Mail, Lock, User } from 'lucide-react';
-import { useRouter } from 'next/navigation'; // Correct import for Next.js 13+
+import { useRouter } from 'next/navigation';
+import toast, { Toaster } from 'react-hot-toast'; // Import React Hot Toast
 
 export default function AuthPage() {
-  const router = useRouter(); // Ensure useRouter is used inside the component function
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [createUserWithEmailAndPassword, user, error] = useCreateUserWithEmailAndPassword(auth);
-  const [signInWithEmailAndPassword, user_sign_in, error_sign_in] = useSignInWithEmailAndPassword(auth);
+  const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
+  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
 
   const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
+  
     try {
-      const res = await signInWithEmailAndPassword(email, password);
-      console.log({ res });
-
-      if (res && res.user) {
-        console.log('User signed in:', res.user);
-        sessionStorage.setItem('user', String(true));
-        setEmail('');
-        setPassword('');
-        router.push('/'); // Correct usage of router.push
+      const res = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCcgQPUGt90vlIAo8UdTc3FOeJ5WbdVsi8', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      if (!res.ok) {
+        const contentType = res.headers.get('Content-Type');
+        let errorMessage = 'An unexpected error occurred.';
+  
+        if (contentType && contentType.includes('application/json')) {
+          const errorData = await res.json();
+          errorMessage = errorData.error?.message || `HTTP error! Status: ${res.status}`;
+        } else {
+          const text = await res.text();
+          errorMessage = `HTTP error! Status: ${res.status}. Response: ${text}`;
+        }
+  
+        throw new Error(errorMessage);
       }
-    } catch (e) {
-      console.error('Error during sign in:', e.message || e);
+  
+      const data = await res.json();
+      // Handle successful response
+      sessionStorage.setItem('user', String(true));
+      setEmail('');
+      setPassword('');
+      router.push('/');
+    } catch (e: any) {
+      if (e.message === 'INVALID_LOGIN_CREDENTIALS') {
+        toast.error('Invalid login credentials. Please try again.'); // Show error toast
+      }
+      console.log('Error caught:', e); // Debugging line
+      console.log('Error message:', e.message); // Debugging line
+  
+      //toast.error(e.message || 'An unexpected error occurred.');
     } finally {
       setIsLoading(false);
     }
   };
+  
+  
 
   const handleRegisterSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
+  
     try {
-      const userCredential = await createUserWithEmailAndPassword(email, password);
-
-      if (userCredential && userCredential.user) {
-        await updateProfile(userCredential.user, { displayName: name });
-        console.log('User profile updated with name:', name);
-        sessionStorage.setItem('user', String(true));
+      // Firebase URL for creating a new user
+      const res = await fetch(
+        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCcgQPUGt90vlIAo8UdTc3FOeJ5WbdVsi8`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password, returnSecureToken: true }),
+        }
+      );
+  
+      if (!res.ok) {
+        const contentType = res.headers.get('Content-Type');
+        let errorMessage = 'An unexpected error occurred.';
+  
+        if (contentType && contentType.includes('application/json')) {
+          const errorData = await res.json();
+          errorMessage = errorData.error?.message || `HTTP error! Status: ${res.status}`;
+        } else {
+          const text = await res.text();
+          errorMessage = `HTTP error! Status: ${res.status}. Response: ${text}`;
+        }
+  
+        throw new Error(errorMessage);
       }
-
+  
+      const data = await res.json();
+      const idToken = data.idToken; // Get the ID token from the response
+  
+      // Update profile with the user's display name
+      const profileRes = await fetch(
+        `https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCcgQPUGt90vlIAo8UdTc3FOeJ5WbdVsi8`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idToken,
+            displayName: name,
+            returnSecureToken: true,
+          }),
+        }
+      );
+  
+      if (!profileRes.ok) {
+        const contentType = profileRes.headers.get('Content-Type');
+        let errorMessage = 'An error occurred while updating the profile.';
+  
+        if (contentType && contentType.includes('application/json')) {
+          const errorData = await profileRes.json();
+          errorMessage = errorData.error?.message || `HTTP error! Status: ${profileRes.status}`;
+        } else {
+          const text = await profileRes.text();
+          errorMessage = `HTTP error! Status: ${profileRes.status}. Response: ${text}`;
+        }
+  
+        throw new Error(errorMessage);
+      }
+  
+      sessionStorage.setItem('user', String(true));
       setName('');
       setEmail('');
       setPassword('');
     } catch (e: any) {
-      console.error('Error during sign up:', e.message || e);
+      if (e.message.includes('EMAIL_EXISTS')) {
+        toast.error('Email already in use. Please use a different email.'); // Show error toast
+      } else if (e.message.includes('WEAK_PASSWORD')) {
+        toast.error('Password should be at least 6 characters.'); // Show error toast
+      } else {
+        toast.error(e.message || 'An unexpected error occurred.'); // Show unexpected error toast
+      }
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <Toaster position="top-right" reverseOrder={false} /> {/* Toaster Component for displaying popups */}
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Welcome to RentSpot</h2>
       </div>
@@ -78,6 +170,7 @@ export default function AuthPage() {
             </TabsList>
 
             <TabsContent value="login">
+              
               <form className="space-y-6" onSubmit={handleSignIn}>
                 <div>
                   <Label htmlFor="email">Email address</Label>
@@ -130,6 +223,7 @@ export default function AuthPage() {
                   </Button>
                 </div>
               </form>
+              
             </TabsContent>
 
             <TabsContent value="register">
