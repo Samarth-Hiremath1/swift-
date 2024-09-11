@@ -10,6 +10,7 @@ import RentalCard from "@/components/RentalCard" // Import RentalCard component
 
 import Link from 'next/link' // Import Link for navigation
 
+import Vase from '../../images/gold-vase.jpg' // Import the image as a string
 
 
 export default function ExplorePage() {
@@ -79,7 +80,7 @@ export default function ExplorePage() {
                   <RentalCard
                     key={index}
                     name={`Rental Item ${index + 1}`}
-                    image={`/placeholder.svg?height=200&width=300`}
+                    image={Vase.src}
                     rating={4.8}
                     numRatings={42}
                     distance="2 miles away"
