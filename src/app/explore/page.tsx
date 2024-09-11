@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
+import RentalCard from "@/components/RentalCard" // Import RentalCard component
 
 import Link from 'next/link' // Import Link for navigation
+
 
 
 export default function ExplorePage() {
@@ -74,23 +76,18 @@ export default function ExplorePage() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[...Array(9)].map((_, index) => (
-                  <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
-                    <img src={`/placeholder.svg?height=200&width=300`} alt="Item" className="w-full h-48 object-cover" />
-                    <div className="p-4">
-                      <h3 className="font-semibold mb-2">Rental Item {index + 1}</h3>
-                      <p className="text-gray-600 mb-2">$50/day</p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <Star className="text-yellow-400 fill-current" size={16} />
-                          <span className="ml-1 text-sm text-gray-600">4.8 (42 reviews)</span>
-                        </div>
-                        <div className="flex items-center text-sm text-gray-500">
-                          <MapPin size={16} className="mr-1" />
-                          <span>2 miles away</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <RentalCard
+                    key={index}
+                    name={`Rental Item ${index + 1}`}
+                    image={`/placeholder.svg?height=200&width=300`}
+                    rating={4.8}
+                    numRatings={42}
+                    distance="2 miles away"
+                    location="Location"
+                    price={50}
+                    isFavorite={false}
+                    isGuestFavorite={index % 2 === 0}
+                  />
                 ))}
               </div>
               <div className="mt-8 flex justify-center">
